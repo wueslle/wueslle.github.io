@@ -1,339 +1,378 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AML Portfolio - Analyst Workspace</title>
-    <!-- Imports Tailwind CSS for styling -->
+    <title>Wueslle Thibes - Data Analyst</title>
+    <!-- Imports Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Imports Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Imports Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
+    <script>
+        tailwind.config = {
+            darkMode: 'class', // Enables dark mode toggling via class
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        accent: { 400: '#818cf8', 500: '#6366f1', 900: '#312e81' } // Indigo accent
+                    }
+                }
+            }
+        }
+    </script>
+
     <style>
-        /* Smooth fade-in for tabs */
-        .tab-content { display: none; animation: fadeIn 0.4s ease-in-out; }
-        .tab-content.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        body { font-family: 'Inter', sans-serif; }
         
-        /* Sleek Scrollbar */
+        .glass-nav { 
+            background: rgba(255, 255, 255, 0.7); 
+            backdrop-filter: blur(12px); 
+            -webkit-backdrop-filter: blur(12px); 
+            border-bottom: 1px solid rgba(0,0,0,0.05); 
+        }
+        .dark .glass-nav { 
+            background: rgba(9, 9, 11, 0.7); 
+            border-bottom: 1px solid rgba(255,255,255,0.05); 
+        }
+        
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-4px); border-color: rgba(99, 102, 241, 0.4); box-shadow: 0 10px 40px -10px rgba(99, 102, 241, 0.1); }
+        
         ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #0f172a; }
-        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+        ::-webkit-scrollbar-track { background: #f4f4f5; }
+        ::-webkit-scrollbar-thumb { background: #d4d4d8; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #a1a1aa; }
+        
+        .dark ::-webkit-scrollbar-track { background: #09090b; }
+        .dark ::-webkit-scrollbar-thumb { background: #27272a; }
+        .dark ::-webkit-scrollbar-thumb:hover { background: #3f3f46; }
     </style>
 </head>
-<body class="bg-slate-900 text-slate-300 font-sans selection:bg-blue-500/30 flex flex-col md:flex-row min-h-screen">
+<body class="bg-zinc-50 text-zinc-600 dark:bg-zinc-950 dark:text-zinc-300 transition-colors duration-300 selection:bg-accent-500/30 min-h-screen flex flex-col antialiased">
 
-    <!-- SIDEBAR -->
-    <aside class="w-full md:w-64 bg-slate-950 border-r border-slate-800 flex flex-col flex-shrink-0">
-        <div class="p-6 border-b border-slate-800">
-            <div class="flex items-center gap-3 text-slate-100 mb-1">
-                <i data-lucide="shield" class="text-blue-500 w-7 h-7"></i>
-                <h1 class="text-xl font-bold tracking-tight">AML<span class="text-blue-500 font-light">Portfolio</span></h1>
-            </div>
-            <p class="text-xs text-slate-500 uppercase tracking-wider font-semibold">Analyst Workspace</p>
-        </div>
-
-        <div class="p-4 flex flex-col gap-4">
-            <div class="mb-4">
-                <h2 class="text-sm font-semibold text-slate-100 mb-1" id="ui-name"></h2>
-                <p class="text-xs text-blue-400" id="ui-title"></p>
+    <!-- NAVIGATION -->
+    <nav class="fixed top-0 w-full z-50 glass-nav transition-colors duration-300">
+        <div class="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
+            <span class="text-zinc-900 dark:text-zinc-100 font-semibold tracking-tight text-lg" id="nav-name"></span>
+            <div class="hidden md:flex gap-8 text-sm font-medium text-zinc-500 dark:text-zinc-400">
+                <a href="#about" id="t-nav-about" class="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">About</a>
+                <a href="#projects" id="t-nav-projects" class="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">Projects</a>
+                <a href="#expertise" id="t-nav-expertise" class="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">Expertise</a>
             </div>
             
-            <div class="space-y-2 mb-6">
-                <a href="#" class="flex items-center gap-2 text-xs text-slate-400 hover:text-slate-200 transition-colors">
-                    <i data-lucide="mail" class="w-3.5 h-3.5"></i> <span id="ui-email"></span>
-                </a>
-                <a href="#" class="flex items-center gap-2 text-xs text-slate-400 hover:text-slate-200 transition-colors">
-                    <i data-lucide="linkedin" class="w-3.5 h-3.5"></i> <span id="ui-linkedin"></span>
-                </a>
-                <a href="#" class="flex items-center gap-2 text-xs text-slate-400 hover:text-slate-200 transition-colors">
-                    <i data-lucide="github" class="w-3.5 h-3.5"></i> <span id="ui-github"></span>
-                </a>
-            </div>
-        </div>
-
-        <nav class="flex-grow flex flex-col">
-            <p class="px-4 text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">Modules</p>
-            
-            <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn w-full flex items-center gap-3 px-4 py-3 text-sm font-medium transition-colors bg-blue-600/10 text-blue-400 border-r-2 border-blue-500">
-                <i data-lucide="activity" class="w-[18px] h-[18px]"></i> Investigations
-            </button>
-            
-            <button onclick="switchTab('intel')" id="nav-intel" class="nav-btn w-full flex items-center gap-3 px-4 py-3 text-sm font-medium transition-colors text-slate-400 hover:bg-slate-800 hover:text-slate-200">
-                <i data-lucide="network" class="w-[18px] h-[18px]"></i> Skills & Intelligence
-            </button>
-            
-            <button onclick="switchTab('dossier')" id="nav-dossier" class="nav-btn w-full flex items-center gap-3 px-4 py-3 text-sm font-medium transition-colors text-slate-400 hover:bg-slate-800 hover:text-slate-200">
-                <i data-lucide="user-check" class="w-[18px] h-[18px]"></i> Analyst Dossier
-            </button>
-        </nav>
-
-        <div class="p-4 border-t border-slate-800 text-xs text-slate-600 flex items-center justify-between mt-auto">
-            <span>System Status:</span>
-            <span class="flex items-center gap-1 text-emerald-500">
-                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> SECURE
-            </span>
-        </div>
-    </aside>
-
-    <!-- MAIN CONTENT AREA -->
-    <main class="flex-grow p-4 md:p-8 overflow-y-auto bg-slate-900">
-        <div class="max-w-5xl mx-auto">
-            
-            <header class="mb-8 flex justify-between items-end border-b border-slate-800 pb-4">
-                <div>
-                    <h2 class="text-2xl font-semibold text-slate-100" id="page-title">Active Investigations</h2>
-                    <p class="text-sm text-slate-500 mt-1">Classified portfolio viewing environment.</p>
-                </div>
-            </header>
-
-            <div class="pb-12">
+            <div class="flex items-center gap-4">
+                <div class="flex gap-4" id="nav-socials"></div>
                 
-                <!-- TAB 1: INVESTIGATIONS (DASHBOARD) -->
-                <div id="tab-dashboard" class="tab-content active space-y-6">
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="kpi-container"></div>
-                    
-                    <div class="bg-slate-800 border border-slate-700 rounded-lg shadow-sm overflow-hidden">
-                        <div class="border-b border-slate-700 bg-slate-800/50 p-4 flex items-center gap-3">
-                            <i data-lucide="search" class="text-blue-400 w-5 h-5"></i>
-                            <h3 class="font-semibold text-slate-200 tracking-wide text-sm uppercase">Active Investigations (Projects)</h3>
-                        </div>
-                        <div class="p-5 space-y-4" id="projects-container"></div>
+                <!-- Toggles -->
+                <div class="flex items-center gap-3 border-l border-zinc-300 dark:border-zinc-800 pl-4 ml-1">
+                    <button onclick="toggleLang()" id="lang-btn" class="text-xs font-bold w-6 text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-colors">
+                        PT
+                    </button>
+                    <button onclick="toggleTheme()" class="text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-colors" title="Toggle Theme">
+                        <i data-lucide="sun" class="w-4 h-4 hidden dark:block"></i>
+                        <i data-lucide="moon" class="w-4 h-4 block dark:hidden"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-grow pt-24 pb-20">
+        
+        <!-- HERO / ABOUT SECTION -->
+        <section id="about" class="max-w-5xl mx-auto px-6 pt-16 pb-24">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent-500/10 text-accent-600 dark:text-accent-400 border border-accent-500/20 text-xs font-semibold uppercase tracking-widest mb-8">
+                <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
+                <span id="t-available">Specializing in AML & Fintech Systems</span>
+            </div>
+            
+            <h1 class="text-4xl md:text-6xl font-bold text-zinc-900 dark:text-zinc-100 tracking-tight leading-tight mb-6">
+                <span id="t-hero-1">Translating complex data into</span> <br class="hidden md:block"/>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-accent-500 to-indigo-400 dark:from-accent-400 dark:to-indigo-300" id="t-hero-2">secure financial ecosystems.</span>
+            </h1>
+            
+            <div class="text-lg md:text-xl text-zinc-600 dark:text-zinc-400 leading-relaxed max-w-4xl space-y-6 mb-12" id="hero-bio">
+                <!-- Bio injected by JS -->
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 pt-8 border-t border-zinc-200 dark:border-zinc-900 transition-colors" id="hero-kpis">
+                <!-- KPIs injected by JS -->
+            </div>
+        </section>
+
+        <!-- PROJECTS SECTION -->
+        <section id="projects" class="max-w-5xl mx-auto px-6 py-24 border-t border-zinc-200 dark:border-zinc-900 transition-colors">
+            <div class="mb-12 text-center md:text-left">
+                <h2 class="text-3xl font-bold text-zinc-900 dark:text-zinc-100 tracking-tight mb-2" id="t-proj-title">Featured Work</h2>
+                <p class="text-zinc-500 dark:text-zinc-400" id="t-proj-desc">Automated pipelines and investigative analytical tools.</p>
+            </div>
+
+            <div class="space-y-12" id="projects-container">
+                <!-- Projects injected by JS -->
+            </div>
+        </section>
+
+        <!-- EXPERTISE & SKILLS SECTION -->
+        <section id="expertise" class="max-w-5xl mx-auto px-6 py-24 border-t border-zinc-200 dark:border-zinc-900 transition-colors">
+            <div class="mb-12">
+                <h2 class="text-3xl font-bold text-zinc-900 dark:text-zinc-100 tracking-tight mb-2" id="t-exp-title">Technical Arsenal</h2>
+                <p class="text-zinc-500 dark:text-zinc-400" id="t-exp-desc">Methodologies I use to protect global financial integrity.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                
+                <div>
+                    <h3 class="text-sm font-semibold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider mb-6 flex items-center gap-2">
+                        <i data-lucide="terminal" class="w-4 h-4 text-accent-500 dark:text-accent-400"></i> <span id="t-core-stack">Core Stack</span>
+                    </h3>
+                    <div class="space-y-8" id="skills-container">
+                        <!-- Skills injected by JS -->
                     </div>
                 </div>
 
-                <!-- TAB 2: INTELLIGENCE -->
-                <div id="tab-intel" class="tab-content grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div class="bg-slate-800 border border-slate-700 rounded-lg shadow-sm overflow-hidden h-fit">
-                        <div class="border-b border-slate-700 bg-slate-800/50 p-4 flex items-center gap-3">
-                            <i data-lucide="database" class="text-blue-400 w-5 h-5"></i>
-                            <h3 class="font-semibold text-slate-200 tracking-wide text-sm uppercase">Core Technology Stack</h3>
-                        </div>
-                        <div class="p-5 space-y-6" id="skills-container"></div>
-                    </div>
-
-                    <div class="bg-slate-800 border border-slate-700 rounded-lg shadow-sm overflow-hidden h-fit">
-                        <div class="border-b border-slate-700 bg-slate-800/50 p-4 flex items-center gap-3">
-                            <i data-lucide="shield" class="text-blue-400 w-5 h-5"></i>
-                            <h3 class="font-semibold text-slate-200 tracking-wide text-sm uppercase">Domain Expertise (AML / KYC)</h3>
-                        </div>
-                        <div class="p-5 space-y-4" id="expertise-container"></div>
-                    </div>
-                </div>
-
-                <!-- TAB 3: DOSSIER -->
-                <div id="tab-dossier" class="tab-content">
-                    <div class="bg-slate-800 border border-slate-700 rounded-lg shadow-sm overflow-hidden">
-                        <div class="border-b border-slate-700 bg-slate-800/50 p-4 flex items-center gap-3">
-                            <i data-lucide="file-text" class="text-blue-400 w-5 h-5"></i>
-                            <h3 class="font-semibold text-slate-200 tracking-wide text-sm uppercase">Analyst Profile</h3>
-                        </div>
-                        <div class="p-5">
-                            <div class="prose prose-invert max-w-none text-slate-300" id="bio-container"></div>
-                            
-                            <div class="mt-8 p-4 bg-blue-900/20 border-l-4 border-blue-500 rounded-r-md">
-                                <h4 class="text-blue-400 font-semibold mb-2 flex items-center gap-2">
-                                    <i data-lucide="lock" class="w-4 h-4"></i> Clearance & Availability
-                                </h4>
-                                <ul class="list-disc list-inside text-sm text-slate-400 space-y-1" id="availability-container"></ul>
-                            </div>
-                        </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider mb-6 flex items-center gap-2">
+                        <i data-lucide="shield" class="w-4 h-4 text-accent-500 dark:text-accent-400"></i> <span id="t-domain">Domain Expertise</span>
+                    </h3>
+                    <div class="space-y-4" id="domain-container">
+                        <!-- Expertise injected by JS -->
                     </div>
                 </div>
 
             </div>
-        </div>
+        </section>
     </main>
 
-    <!-- ⚙️ DATA CONFIGURATION AND LOGIC -->
+    <footer class="border-t border-zinc-200 dark:border-zinc-900 bg-zinc-100 dark:bg-zinc-950 py-12 transition-colors">
+        <div class="max-w-5xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4 text-zinc-500 text-sm">
+            <p id="footer-text"></p>
+            <div class="flex gap-6" id="footer-links">
+                <a href="#about" class="hover:text-zinc-900 dark:hover:text-zinc-300 transition-colors" id="t-top">Top</a>
+            </div>
+        </div>
+    </footer>
+
     <script>
-        // --- EDIT YOUR INFO HERE ---
-        const CONFIG = {
-            profile: {
-                name: "Alex Mercer",
-                title: "AML Data Analyst",
-                email: "alex.mercer@email.com",
-                linkedin: "linkedin.com/in/amercer",
-                github: "github.com/am-data"
+        let currentLang = 'en';
+
+        const DATA = {
+            en: {
+                ui: {
+                    navAbout: "About", navProjects: "Projects", navExpertise: "Expertise", top: "Top",
+                    available: "Specializing in AML & Fintech Systems",
+                    hero1: "Translating complex data into",
+                    hero2: "secure financial ecosystems.",
+                    projTitle: "Featured Work",
+                    projDesc: "Selected work in Anti-Money Laundering and financial forensics.",
+                    expTitle: "Technical Arsenal",
+                    expDesc: "Tools and methodologies I use to uncover anomalies and protect global systems.",
+                    coreStack: "Core Stack",
+                    domain: "Domain Expertise",
+                    viewProject: "View Project details"
+                },
+                profile: {
+                    name: "Wueslle Thibes",
+                    email: "mailto:wueslle.thibes@email.com", 
+                    linkedin: "https://linkedin.com/in/wueslle",
+                    github: "https://github.com/wueslle"
+                },
+                kpis: [
+                    { label: "Experience", value: "2+ Years" },
+                    { label: "Specialization", value: "AML & Compliance" },
+                    { label: "Infrastructure", value: "GCP & BigQuery" },
+                    { label: "Automation", value: "Python & Selenium" }
+                ],
+                bio: [
+                    "I build the data infrastructure that secures global financial systems. Currently at EBANX, I specialize in the convergence of Data Analysis and Compliance, focusing on Anti-Money Laundering (AML) and Transaction Monitoring across the LATAM market.",
+                    "My methodology centers on transforming intricate regulatory requirements into scalable, automated pipelines. I leverage Python (Pandas/Statsmodels) and GCP/BigQuery to detect high-risk patterns and optimize financial integrity workflows for high-velocity environments.",
+                    "Beyond analytics, I bridge the gap between technical execution and regulatory rigor, ensuring that financial ecosystems remain both efficient and fully compliant with global integrity standards."
+                ],
+                skills: [
+                    { category: "Data Engineering & Cloud", items: ["SQL", "GCP", "BigQuery", "Snowflake"] },
+                    { category: "Programming & Scraping", items: ["Python", "Pandas / Statsmodels", "Selenium", "BeautifulSoup"] },
+                    { category: "Reporting & Visualization", items: ["Looker", "Tableau", "Jupyter"] }
+                ],
+                expertise: [
+                    { title: "AML / CFT Compliance", desc: "Developing frameworks to monitor and prevent financial terrorism and money laundering." },
+                    { title: "Transaction Monitoring", desc: "Building automated pipelines to detect high-risk transactional patterns and structural layering." },
+                    { title: "RegTech Automation", desc: "Transforming regulatory hurdles into scalable software solutions and automated workflows." },
+                    { title: "Sanctions & Risk", desc: "Analyzing cross-border risk and ensuring global compliance standards across LATAM markets." }
+                ],
+                projects: [
+                    {
+                        title: "Transaction Monitoring Pipeline",
+                        id: "EB-2024-AML",
+                        desc: "Developed a high-velocity monitoring pipeline for LATAM transactions. Leveraged BigQuery and Python to identify structuring patterns, significantly increasing the detection rate of potential SAR-worthy activities.",
+                        tech: ["BigQuery", "GCP", "Python", "SQL"],
+                        link: "https://github.com"
+                    },
+                    {
+                        title: "Automated Compliance Scraper",
+                        id: "SCRAPE-REG",
+                        desc: "Engineered a distributed crawler using Selenium and BeautifulSoup to automate the collection of global sanction lists and local regulatory updates, feeding real-time data into internal risk models.",
+                        tech: ["Selenium", "BeautifulSoup", "Python", "SQL"],
+                        link: "https://github.com"
+                    }
+                ]
             },
-            kpis: [
-                { label: "Rows Analyzed", value: "15.2M+", icon: "database", color: "text-blue-400", bg: "bg-blue-500/10" },
-                { label: "False Positives Reduced", value: "35.4%", icon: "user-check", color: "text-emerald-400", bg: "bg-emerald-500/10" },
-                { label: "Anomalies Flagged", value: "2,401", icon: "alert-triangle", color: "text-rose-400", bg: "bg-rose-500/10" }
-            ],
-            bio: [
-                "I am a Data Analyst specializing in Anti-Money Laundering (AML) and financial crime detection. I sit at the intersection of data science, compliance, and cybersecurity.",
-                "My primary focus is leveraging large-scale data to secure financial ecosystems. Whether it's a traditional banking infrastructure or a high-growth fintech startup, I build the analytical models and data pipelines required to monitor high-velocity transaction streams, identify illicit typologies, and optimize rules engines.",
-                "I believe that effective compliance shouldn't mean drowning investigators in false positives. By applying rigorous statistical analysis and machine learning to transaction monitoring, I help financial institutions stay compliant while dramatically reducing operational overhead."
-            ],
-            availability: [
-                "Currently seeking opportunities in FinTech, RegTech, or traditional Banking.",
-                "Available for remote or hybrid deployment.",
-                "Certified Anti-Money Laundering Specialist (CAMS)"
-            ],
-            skills: [
-                { category: "Data Engineering & DB", items: ["SQL (Advanced)", "Snowflake", "PostgreSQL", "Neo4j (Graph)"] },
-                { category: "Programming & Analytics", items: ["Python 3.x", "Pandas / NumPy", "Scikit-Learn", "Bash/Shell"] },
-                { category: "Visualization & BI", items: ["Tableau", "Looker", "D3.js"] }
-            ],
-            expertise: [
-                { title: "Transaction Monitoring (TM)", desc: "Tuning rules engines, optimizing thresholds, and analyzing velocity/volume alerts to identify structuring and layering." },
-                { title: "Customer Due Diligence (CDD/EDD)", desc: "Automating risk scoring models for onboarding and continuous monitoring of high-risk entities and PEPs." },
-                { title: "Blockchain Forensics", desc: "Tracing on-chain heuristics, identifying mixer usage, and mapping fiat off-ramps in crypto-native environments." },
-                { title: "Regulatory Reporting", desc: "Building automated data pipelines to support Suspicious Activity Report (SAR) and Currency Transaction Report (CTR) generation." }
-            ],
-            projects: [
-                {
-                    title: "Transaction Monitoring Optimizer",
-                    id: "TM-2024-ALPHA",
-                    type: "Risk & Analytics",
-                    desc: "Optimized AML alert thresholds using Python and SQL. Analyzed 2M+ historical transactions to reduce false-positive alerts by 35% without missing any historical SARs, saving the investigations team 40+ hours per week.",
-                    tech: ["Python", "SQL", "Pandas", "Tableau"],
-                    impact: "High",
-                    link: "https://github.com",
-                    embedUrl: "" 
+            pt: {
+                ui: {
+                    navAbout: "Sobre", navProjects: "Projetos", navExpertise: "Especialidades", top: "Topo",
+                    available: "Especialista em Sistemas de PLD & Fintech",
+                    hero1: "Traduzindo dados complexos em",
+                    hero2: "ecossistemas financeiros seguros.",
+                    projTitle: "Trabalhos em Destaque",
+                    projDesc: "Pipelines automatizados e ferramentas analíticas de investigação.",
+                    expTitle: "Arsenal Técnico",
+                    expDesc: "Ferramentas e metodologias que uso para proteger a integridade financeira global.",
+                    coreStack: "Stack Principal",
+                    domain: "Especialidade de Domínio",
+                    viewProject: "Ver detalhes do Projeto"
                 },
-                {
-                    title: "Crypto Mule Network Graph",
-                    id: "GRAPH-NET-BETA",
-                    type: "Financial Forensics",
-                    desc: "Built an interactive network visualization mapping hop-to-hop crypto and fiat transfers. Identified 3 previously undetected money muling rings by analyzing rapid velocity and bridging patterns.",
-                    tech: ["Neo4j", "Cypher", "D3.js", "Snowflake"],
-                    impact: "Critical",
-                    link: "https://github.com"
+                profile: {
+                    name: "Wueslle Thibes",
+                    email: "mailto:wueslle.thibes@email.com",
+                    linkedin: "https://linkedin.com/in/wueslle",
+                    github: "https://github.com/wueslle"
                 },
-                {
-                    title: "Automated KYC Risk Scoring",
-                    id: "KYC-ML-01",
-                    type: "Machine Learning",
-                    desc: "Developed a Random Forest model to assign dynamic risk scores to new users during the CDD (Customer Due Diligence) onboarding phase, automatically routing high-risk entities for enhanced manual review.",
-                    tech: ["Scikit-Learn", "XGBoost", "Jupyter", "AWS"],
-                    impact: "Medium"
-                }
-            ]
+                kpis: [
+                    { label: "Experiência", value: "2+ Anos" },
+                    { label: "Especialização", value: "PLD & Compliance" },
+                    { label: "Infraestrutura", value: "GCP & BigQuery" },
+                    { label: "Automação", value: "Python & Selenium" }
+                ],
+                bio: [
+                    "Eu construo a infraestrutura de dados que protege sistemas financeiros globais. Atualmente no EBANX, me especializo na convergência entre Análise de Dados e Compliance, com foco em Prevenção à Lavagem de Dinheiro (PLD) e Monitoramento de Transações no mercado LATAM.",
+                    "Minha metodologia foca em transformar requisitos regulatórios intrincados em pipelines automatizados e escaláveis. Utilizo Python (Pandas/Statsmodels) e GCP/BigQuery para detectar padrões de alto risco e otimizar fluxos de integridade financeira.",
+                    "Além da análise, atuo como ponte entre execução técnica e rigor regulatório, garantindo que ecossistemas financeiros permaneçam eficientes e totalmente em conformidade com padrões globais de integridade."
+                ],
+                skills: [
+                    { category: "Engenharia de Dados e Cloud", items: ["SQL", "GCP", "BigQuery", "Snowflake"] },
+                    { category: "Programação e Scraping", items: ["Python", "Pandas / Statsmodels", "Selenium", "BeautifulSoup"] },
+                    { category: "Reporting e Visualização", items: ["Looker", "Tableau", "Jupyter"] }
+                ],
+                expertise: [
+                    { title: "Compliance PLD / CFT", desc: "Desenvolvimento de frameworks para monitorar e prevenir o financiamento ao terrorismo e lavagem de dinheiro." },
+                    { title: "Monitoramento de Transações", desc: "Construção de pipelines automatizados para detectar padrões transacionais de alto risco." },
+                    { title: "Automação em RegTech", desc: "Transformando obstáculos regulatórios em soluções de software escaláveis e fluxos automatizados." },
+                    { title: "Sanções e Risco", desc: "Análise de risco transfronteiriço e garantia de conformidade global nos mercados da América Latina." }
+                ],
+                projects: [
+                    {
+                        title: "Pipeline de Monitoramento de Transações",
+                        id: "EB-2024-AML",
+                        desc: "Desenvolvi um pipeline de monitoramento de alta velocidade para transações LATAM. Utilizei BigQuery e Python para identificar padrões de estruturação, aumentando a taxa de detecção de atividades suspeitas.",
+                        tech: ["BigQuery", "GCP", "Python", "SQL"],
+                        link: "https://github.com"
+                    },
+                    {
+                        title: "Scraper de Compliance Automatizado",
+                        id: "SCRAPE-REG",
+                        desc: "Projetei um crawler distribuído usando Selenium e BeautifulSoup para automatizar a coleta de listas de sanções globais e atualizações regulatórias locais.",
+                        tech: ["Selenium", "BeautifulSoup", "Python", "SQL"],
+                        link: "https://github.com"
+                    }
+                ]
+            }
         };
 
-        // --- RENDER ENGINE (DO NOT TOUCH) ---
-        function renderData() {
-            // Profile
-            document.getElementById('ui-name').innerText = CONFIG.profile.name;
-            document.getElementById('ui-title').innerText = CONFIG.profile.title;
-            document.getElementById('ui-email').innerText = CONFIG.profile.email;
-            document.getElementById('ui-linkedin').innerText = CONFIG.profile.linkedin;
-            document.getElementById('ui-github').innerText = CONFIG.profile.github;
+        function toggleTheme() {
+            document.documentElement.classList.toggle('dark');
+        }
 
-            // KPIs
-            document.getElementById('kpi-container').innerHTML = CONFIG.kpis.map(kpi => `
-                <div class="bg-slate-800 border border-slate-700 p-4 rounded-lg flex items-center gap-4">
-                    <div class="p-3 rounded-md ${kpi.bg} ${kpi.color}">
-                        <i data-lucide="${kpi.icon}" class="w-6 h-6"></i>
-                    </div>
-                    <div>
-                        <p class="text-slate-400 text-xs font-semibold uppercase tracking-wider">${kpi.label}</p>
-                        <p class="text-2xl font-bold text-slate-100">${kpi.value}</p>
-                    </div>
+        function toggleLang() {
+            currentLang = currentLang === 'en' ? 'pt' : 'en';
+            document.getElementById('lang-btn').innerText = currentLang === 'en' ? 'PT' : 'EN';
+            renderData();
+        }
+
+        function renderData() {
+            const c = DATA[currentLang];
+            const ui = c.ui;
+
+            document.getElementById('t-nav-about').innerText = ui.navAbout;
+            document.getElementById('t-nav-projects').innerText = ui.navProjects;
+            document.getElementById('t-nav-expertise').innerText = ui.navExpertise;
+            document.getElementById('t-available').innerText = ui.available;
+            document.getElementById('t-hero-1').innerText = ui.hero1;
+            document.getElementById('t-hero-2').innerText = ui.hero2;
+            document.getElementById('t-proj-title').innerText = ui.projTitle;
+            document.getElementById('t-proj-desc').innerText = ui.projDesc;
+            document.getElementById('t-exp-title').innerText = ui.expTitle;
+            document.getElementById('t-exp-desc').innerText = ui.expDesc;
+            document.getElementById('t-core-stack').innerText = ui.coreStack;
+            document.getElementById('t-domain').innerText = ui.domain;
+            document.getElementById('t-top').innerText = ui.top;
+
+            document.getElementById('nav-name').innerText = c.profile.name;
+            document.getElementById('footer-text').innerText = `© ${new Date().getFullYear()} ${c.profile.name}.`;
+            
+            const socialLinks = `
+                <a href="${c.profile.github}" target="_blank" class="text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"><i data-lucide="github" class="w-5 h-5"></i></a>
+                <a href="${c.profile.linkedin}" target="_blank" class="text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"><i data-lucide="linkedin" class="w-5 h-5"></i></a>
+                <a href="${c.profile.email}" class="text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"><i data-lucide="mail" class="w-5 h-5"></i></a>
+            `;
+            document.getElementById('nav-socials').innerHTML = socialLinks;
+
+            document.getElementById('hero-bio').innerHTML = c.bio.map(p => `<p>${p}</p>`).join('');
+
+            document.getElementById('hero-kpis').innerHTML = c.kpis.map(kpi => `
+                <div>
+                    <p class="text-xl md:text-2xl font-bold text-zinc-900 dark:text-zinc-100 mb-1 leading-none">${kpi.value}</p>
+                    <p class="text-[10px] md:text-xs font-semibold text-zinc-500 uppercase tracking-widest">${kpi.label}</p>
                 </div>
             `).join('');
 
-            // Projects
-            document.getElementById('projects-container').innerHTML = CONFIG.projects.map(p => {
-                let impactColor = p.impact === 'Critical' ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30' : 
-                                  p.impact === 'High' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' : 
-                                  'bg-blue-500/20 text-blue-400 border border-blue-500/30';
-                
+            document.getElementById('projects-container').innerHTML = c.projects.map(p => {
                 let html = `
-                <div class="group border border-slate-700 bg-slate-800/30 rounded-lg p-5 hover:border-blue-500/50 transition-colors">
-                    <div class="flex justify-between items-start mb-2">
-                        <h4 class="text-lg font-semibold text-slate-100">${p.title}</h4>
-                        <span class="text-xs font-bold px-2 py-1 rounded-full uppercase tracking-wider ${impactColor}">${p.impact} Impact</span>
-                    </div>
-                    <p class="text-slate-400 text-sm font-mono mb-3">ID: ${p.id} | TYPE: ${p.type}</p>
-                    <p class="text-slate-300 text-sm leading-relaxed mb-4">${p.desc}</p>
-                    <div class="flex gap-2 flex-wrap mb-4">
-                        ${p.tech.map(t => `<span class="px-3 py-1 bg-slate-700/50 text-slate-300 text-sm rounded-md border border-slate-600">${t}</span>`).join('')}
+                <div class="bg-white dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 md:p-8 card-hover relative overflow-hidden group">
+                    <div class="absolute top-0 left-0 w-1 h-full bg-accent-500/0 group-hover:bg-accent-500/50 transition-colors"></div>
+                    <div class="flex flex-col md:flex-row md:items-start justify-between gap-6 mb-6">
+                        <div class="max-w-2xl">
+                            <h3 class="text-2xl font-bold text-zinc-900 dark:text-zinc-100 mb-3">${p.title}</h3>
+                            <p class="text-zinc-600 dark:text-zinc-400 leading-relaxed">${p.desc}</p>
+                        </div>
+                        <div class="flex flex-wrap gap-2 md:justify-end shrink-0 max-w-[250px]">
+                            ${p.tech.map(t => `<span class="px-2.5 py-1 bg-zinc-100 dark:bg-zinc-800/80 text-zinc-700 dark:text-zinc-300 text-xs font-medium rounded-md border border-zinc-200 dark:border-zinc-700/50">${t}</span>`).join('')}
+                        </div>
                     </div>`;
 
-                if(p.embedUrl || p.link) {
-                    html += `<div class="mt-5 pt-5 border-t border-slate-700/50 flex flex-col gap-4">`;
-                    if(p.embedUrl) {
-                        html += `
-                        <div class="w-full bg-slate-900 border border-slate-700 rounded-md overflow-hidden h-72 md:h-96 relative flex flex-col">
-                            <div class="bg-slate-800/80 px-3 py-2 border-b border-slate-700 flex items-center gap-2">
-                                <i data-lucide="layout-dashboard" class="text-blue-400 w-3.5 h-3.5"></i>
-                                <span class="text-xs font-semibold tracking-wider text-slate-300 uppercase">Interactive Dashboard View</span>
-                            </div>
-                            <iframe src="${p.embedUrl}" class="w-full flex-grow border-0 bg-slate-100/5" allowfullscreen></iframe>
-                        </div>`;
-                    }
-                    if(p.link) {
-                        html += `
-                        <div>
-                            <a href="${p.link}" target="_blank" class="inline-flex items-center gap-2 text-sm font-medium text-blue-400 hover:text-blue-300 transition-colors bg-blue-500/10 hover:bg-blue-500/20 px-4 py-2 rounded-md border border-blue-500/20">
-                                <i data-lucide="external-link" class="w-4 h-4"></i> View External Resource
-                            </a>
-                        </div>`;
-                    }
-                    html += `</div>`;
+                if(p.link) {
+                    html += `
+                    <div class="mt-4">
+                        <a href="${p.link}" target="_blank" class="inline-flex items-center gap-2 text-sm font-medium text-zinc-900 dark:text-zinc-100 hover:text-accent-500 dark:hover:text-accent-400 transition-colors group/link">
+                            ${ui.viewProject}
+                            <i data-lucide="arrow-right" class="w-4 h-4 group-hover/link:translate-x-1 transition-transform"></i>
+                        </a>
+                    </div>`;
                 }
                 html += `</div>`;
                 return html;
             }).join('');
 
-            // Skills
-            document.getElementById('skills-container').innerHTML = CONFIG.skills.map(s => `
+            document.getElementById('skills-container').innerHTML = c.skills.map(s => `
                 <div>
-                    <h4 class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-3">${s.category}</h4>
+                    <h4 class="text-zinc-500 dark:text-zinc-400 text-xs font-semibold uppercase tracking-wider mb-3">${s.category}</h4>
                     <div class="flex flex-wrap gap-2">
-                        ${s.items.map(item => `<span class="px-3 py-1 bg-slate-700/50 text-slate-300 text-sm rounded-md border border-slate-600">${item}</span>`).join('')}
+                        ${s.items.map(item => `<span class="px-3 py-1.5 bg-zinc-100 dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 text-sm rounded-lg border border-zinc-200 dark:border-zinc-800">${item}</span>`).join('')}
                     </div>
                 </div>
             `).join('');
 
-            // Expertise
-            document.getElementById('expertise-container').innerHTML = CONFIG.expertise.map(e => `
-                <div class="p-3 border border-slate-700 bg-slate-800/50 rounded-md">
-                    <h4 class="text-slate-200 font-medium mb-1">${e.title}</h4>
-                    <p class="text-slate-400 text-sm">${e.desc}</p>
+            document.getElementById('domain-container').innerHTML = c.expertise.map(e => `
+                <div class="p-5 border border-zinc-200 dark:border-zinc-800/50 bg-zinc-50 dark:bg-zinc-900/30 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-900/80 transition-colors">
+                    <h4 class="text-zinc-900 dark:text-zinc-100 font-medium mb-1">${e.title}</h4>
+                    <p class="text-zinc-600 dark:text-zinc-400 text-sm leading-relaxed">${e.desc}</p>
                 </div>
             `).join('');
 
-            // Bio & Availability
-            document.getElementById('bio-container').innerHTML = CONFIG.bio.map((p, i) => 
-                `<p class="${i === 0 ? 'text-lg leading-relaxed mb-6' : 'mb-6'}">${p}</p>`
-            ).join('');
-            
-            document.getElementById('availability-container').innerHTML = CONFIG.availability.map(a => 
-                `<li>${a}</li>`
-            ).join('');
-
-            lucide.createIcons(); // Initialize Icons
+            lucide.createIcons();
         }
 
-        // Tab Switching Logic
-        function switchTab(tabId) {
-            // Hide all tabs
-            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-            // Remove active state from all buttons
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.classList.remove('bg-blue-600/10', 'text-blue-400', 'border-r-2', 'border-blue-500');
-                btn.classList.add('text-slate-400');
-            });
-
-            // Show selected tab
-            document.getElementById('tab-' + tabId).classList.add('active');
-            
-            // Add active state to clicked button
-            let activeBtn = document.getElementById('nav-' + tabId);
-            activeBtn.classList.remove('text-slate-400');
-            activeBtn.classList.add('bg-blue-600/10', 'text-blue-400', 'border-r-2', 'border-blue-500');
-
-            // Update page title
-            const titles = { 'dashboard': 'Active Investigations', 'intel': 'Intelligence & Tooling', 'dossier': 'Analyst Dossier' };
-            document.getElementById('page-title').innerText = titles[tabId];
-        }
-
-        // Boot up
         window.onload = renderData;
     </script>
 </body>
