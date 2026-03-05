@@ -2,7 +2,7 @@ Professional AML Data Portfolio — Wueslle Thibes
 
 This repository contains the source code for my professional portfolio, designed with a modern, tech-minimalist aesthetic tailored for the Fintech and Compliance industry. It is built to showcase data infrastructure, automated pipelines, and analytical investigations.
 
-Live Version: wueslle.com (or yourusername.github.io)
+Live Version: wueslle.com
 
 👤 About Me
 
